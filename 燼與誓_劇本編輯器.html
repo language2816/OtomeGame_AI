@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0812;
+    --bg2: #110e1f;
+    --bg3: #1a1630;
+    --border: rgba(180,160,255,0.15);
+    --border2: rgba(180,160,255,0.3);
+    --text: #e8e0ff;
+    --text2: #a090c0;
+    --text3: #6050a0;
+    --accent: #c4a8f0;
+    --gold: #f0e0a0;
+    --rose: #f0a0a8;
+    --green: #a0f0b0;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  .header {
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 2rem;
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 0.75rem 1.25rem;
+    font-size: 13px;
+    color: var(--text3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+  }
+
+  .tab:hover { color: var(--text2); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .content { padding: 1.5rem 2rem; }
+
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .btn {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: var(--bg3); color: var(--text); border-color: var(--accent); }
+  .btn.primary { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { background: rgba(196,168,240,0.1); }
+  .btn.danger:hover { border-color: var(--rose); color: var(--rose); }
+
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .char-card {
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    background: var(--bg2);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .char-card:hover { border-color: var(--border2); background: var(--bg3); }
+  .char-card.selected { border-color: var(--accent); }
+
+  .char-color-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .char-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .char-role {
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .char-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .char-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .panel {
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg2);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group { margin-bottom: 1rem; }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 13px;
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  .form-group select option { background: #1a1630; }
+
+  .event-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .event-item {
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    background: var(--bg2);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .event-item:hover { border-color: var(--border2); }
+
+  .event-affection {
+    font-size: 11px;
+    border-radius: 20px;
+    padding: 3px 10px;
+    border: 0.5px solid var(--border2);
+    white-space: nowrap;
+    margin-top: 2px;
+    background: var(--bg3);
+    color: var(--text2);
+  }
+
+  .event-title {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .event-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .mood-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .mood-table th {
+    text-align: left;
+    padding: 8px 12px;
+    color: var(--text3);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .mood-table td {
+    padding: 10px 12px;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text2);
+    vertical-align: middle;
+  }
+  .mood-table tr:last-child td { border-bottom: none; }
+  .mood-table td:first-child { color: var(--text3); font-size: 12px; }
+
+  .affection-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .affection-table th {
+    text-align: left;
+    padding: 8px 12px;
+    color: var(--text3);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .affection-table td {
+    padding: 10px 12px;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text2);
+  }
+  .affection-table tr:last-child td { border-bottom: none; }
+
+  .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 0.5px solid;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 0.5px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+  .timeline-label { font-size: 13px; color: var(--text2); flex: 1; }
+  .timeline-edit {
+    font-size: 11px;
+    color: var(--text3);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    background: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: all 0.2s;
+  }
+  .timeline-edit:hover { border-color: var(--accent); color: var(--accent); }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1rem;
+  }
+  .modal {
+    background: var(--bg2);
+    border: 0.5px solid var(--border2);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 16px;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--bg3);
+    color: var(--text3);
+    border: 0.5px solid var(--border);
+    margin-right: 4px;
+  }
+
+  .hidden { display: none !important; }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text3);
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .color-swatch {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 0.5px solid rgba(255,255,255,0.1);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="title">✦ 燼與誓 — 劇本編輯器</div>
+    <div class="subtitle">Where Oaths Are Ash · Script Manager</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn" onclick="exportScript()">匯出劇本</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('chars')">角色管理</button>
+  <button class="tab" onclick="switchTab('events')">特殊事件</button>
+  <button class="tab" onclick="switchTab('timeline')">時間軸</button>
+  <button class="tab" onclick="switchTab('system')">好感度系統</button>
+  <button class="tab" onclick="switchTab('geography')">地理地形</button>
+  <button class="tab" onclick="switchTab('world')">世界觀設定</button>
+  <button class="tab" onclick="switchTab('magic')">魔法體系</button>
+  <button class="tab" onclick="switchTab('factions')">勢力格局</button>
+  <button class="tab" onclick="switchTab('images')">立繪管理</button>
+</div>
+
+<div class="content">
+
+  <!-- 角色管理 -->
+  <div id="tab-chars">
+    <div class="section-title">
+      <span>角色列表</span>
+      <button class="btn primary" onclick="openCharModal()">＋ 新增角色</button>
+    </div>
+    <div class="char-grid" id="char-grid"></div>
+  </div>
+
+  <!-- 特殊事件 -->
+  <div id="tab-events" class="hidden">
+    <div class="section-title">
+      <span>特殊事件</span>
+      <button class="btn primary" onclick="openEventModal()">＋ 新增事件</button>
+    </div>
+    <div style="margin-bottom:1rem;display:flex;gap:8px;flex-wrap:wrap" id="event-char-filter"></div>
+    <div class="event-list" id="event-list"></div>
+  </div>
+
+  <!-- 時間軸 -->
+  <div id="tab-timeline" class="hidden">
+    <div class="section-title">
+      <span>劇情時間軸</span>
+      <button class="btn primary" onclick="addTimelineStage()">＋ 新增階段</button>
+    </div>
+    <div class="panel" id="timeline-panel"></div>
+  </div>
+
+  <!-- 好感度系統 -->
+  <div id="tab-system" class="hidden">
+    <div class="section-title">
+      <span>好感度系統設定</span>
+      <button class="btn primary" onclick="openAffectionModal()">＋ 新增等級</button>
+    </div>
+    <div class="panel">
+      <table class="affection-table" id="affection-table"></table>
+    </div>
+    <div class="section-title" style="margin-top:1.5rem">
+      <span>系統參數</span>
+    </div>
+    <div class="panel">
+      <div class="form-row">
+        <div class="form-group">
+          <label>每次對話最大增加</label>
+          <input type="number" id="param-max-gain" value="15">
+        </div>
+        <div class="form-group">
+          <label>每次對話最大減少</label>
+          <input type="number" id="param-max-loss" value="10">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>True End 觸發好感度</label>
+          <input type="number" id="param-true-end" value="100">
+        </div>
+        <div class="form-group">
+          <label>好感度上限</label>
+          <input type="number" id="param-max" value="100">
+        </div>
+      </div>
+      <button class="btn primary" onclick="saveParams()">儲存設定</button>
+    </div>
+  </div>
+
+  <!-- 地理地形 -->
+  <div id="tab-geography" class="hidden">
+    <div class="section-title"><span>世界地理與地形</span></div>
+
+    <!-- 世界地圖 -->
+    <div class="panel" style="padding:1rem;margin-bottom:1rem">
+      <div class="section-title" style="font-size:13px;margin-bottom:0.75rem">
+        <span>🗺️ 雅古利德大陸 — 世界地圖</span>
+      </div>
+      <img
+        src="https://raw.githubusercontent.com/language2816/OtomeGame_AI/5c1b0e38a32820fe3f674de934dba4275add3f2c/%E4%B8%96%E7%95%8C%E5%9C%B0%E5%9C%96.png"
+        alt="燼與誓 世界地圖"
+        style="width:100%;border-radius:10px;border:0.5px solid var(--border);display:block;"
+        onerror="this.style.opacity=0.3"
+      >
+    </div>
+
+    <div class="panel">
+      <div class="form-group">
+        <label>主大陸信息</label>
+        <textarea id="geo-continent" rows="4" placeholder="大陸名稱、形狀、尺寸等...">雅古利德大陸 — 東西寬闊延伸，南北略窄（類似哈薩克），整體厚實，海岸線不繁複。</textarea>
+      </div>
+      <div class="form-group">
+        <label>地形分界線（三條）</label>
+        <textarea id="geo-boundaries" rows="5" placeholder="分界線名稱、位置、功能...">1. 分脊河（西）- 古利德 ↔ 弗瑞亞，可渡，往來頻繁
+2. 羅德羅斯山脈（東）- 古利德 ↔ 厄瑞斯，難以穿越，存在山口通道
+3. 北方防線山脈（北）- 防守魔獸領地，北部要塞是最後堡壘</textarea>
+      </div>
+      <div class="form-group">
+        <label>主要城市與駐地（距離參考）</label>
+        <textarea id="geo-cities" rows="6" placeholder="城市、駐地、方向、距離...">• 波勒及（北 - 中央偏北）- 盧西安駐守
+• 北部要塞（北 4-5天）- 卡利克斯駐守
+• 祭神之森（西南 7天）- 席爾文駐守
+• 沃爾斯港（南 6天）- 多里安據點
+• 帕里村（西 3天）- 主角故鄉</textarea>
+      </div>
+      <div class="form-group">
+        <label>外部勢力與領地</label>
+        <textarea id="geo-powers" rows="4" placeholder="勢力名稱、位置、特徵...">弗瑞亞王廷（西方 - 獸人部落聯盟，獸王統治）
+厄瑞斯帝國（東方 - 軍事擴張帝國，50年前滅瓦赫姆王國）
+北方魔獸領地（北方 - 高密度魔物區）
+阿薩大陸（南方隔海 - 魔族，崇尚和平）</textarea>
+      </div>
+      <div class="form-group">
+        <label>地理與故事的連結</label>
+        <textarea id="geo-story" rows="4" placeholder="地理如何推動敘事...">地理隔離 → 信息片段化 → 各方無法看清全貌 → 無人能阻止天秤傾斜
+四位角色駐地分別在北、西、西南、南方 → 象徵被邊緣勢力包圍的古利德</textarea>
+      </div>
+      <button class="btn primary" onclick="alert('地理地形設定已檢視')">儲存地理設定</button>
+    </div>
+  </div>
+
+  <!-- 魔法體系 -->
+  <div id="tab-magic" class="hidden">
+    <div class="section-title"><span>魔法體系設定</span></div>
+    <div class="panel">
+      <div class="form-group">
+        <label>元素魔法（主流）</label>
+        <textarea id="magic-element" rows="4">可教學、可量化的學術體系，按魔力強弱形成社會階層。每個人天生魔力不同，強弱差距可被測定，直接影響社會地位與政治資本。學術機構負責研究、授權與等級認證，是元素魔法的最高話語權掌握者。</textarea>
+      </div>
+      <div class="form-group">
+        <label>符文魔法（古典）</label>
+        <textarea id="magic-rune" rows="4">屬於古老傳承，與元素魔法體系平行但地位不同。需要精確的公式與書寫才能生效，無代價，但容錯率極低——寫錯一筆則完全無效。神殿體系是符文魔法最重要的保存者與使用者。</textarea>
+      </div>
+      <div class="form-group">
+        <label>契約魔法（誓言）</label>
+        <textarea id="magic-contract" rows="4">需要雙方自願同意方能成立，一旦締結便對雙方具有約束力。「誓言」在這個世界不只是語言，而是具有魔法效力的契約。</textarea>
+      </div>
+      <div class="form-group">
+        <label>灰脈（特殊體質）</label>
+        <textarea id="magic-grey" rows="5">古典文獻記載屬性為「無」——不屬於任何元素，也無法用符文公式捕捉或複製。本質是「想像力即魔法」——感應力來自無意識的想像與意志投射。持有者無法主動觸發，也無法關閉。靠近魔法印記、詛咒物、或帶有強烈意志的場所時，身體會先於意識有所反應。</textarea>
+      </div>
+      <div class="form-group">
+        <label>天秤神話與異端神明</label>
+        <textarea id="magic-balance" rows="5">世界由秩序（Orda）與混沌（Vael）共同創造「天秤」維持平衡。魔物是天秤的矯正機制——當世界某處力量過度積聚，魔物便出現消耗歸零。若天秤傾斜超過臨界點，「異端神明（The Unwritten）」將從裂縫中誕生——千年前古書有載，已被世人遺忘。</textarea>
+      </div>
+      <button class="btn primary" onclick="alert('魔法體系設定已儲存')">儲存魔法設定</button>
+    </div>
+  </div>
+
+  <!-- 勢力格局 -->
+  <div id="tab-factions" class="hidden">
+    <div class="section-title">
+      <span>勢力格局</span>
+      <button class="btn primary" onclick="openFactionModal()">＋ 新增勢力</button>
+    </div>
+    <div id="faction-list" class="event-list"></div>
+  </div>
+
+  <!-- 立繪管理 -->
+  <div id="tab-images" class="hidden">
+    <div class="section-title"><span>角色立繪管理</span></div>
+    <div class="panel">
+      <div class="form-group">
+        <label>GitHub Raw 圖片根路徑</label>
+        <input type="text" id="img-base-url" value="https://raw.githubusercontent.com/language2816/OtomeGame_AI/5c1b0e38a32820fe3f674de934dba4275add3f2c/%E8%A7%92%E8%89%B2%E4%BA%BA%E7%89%A9/" placeholder="https://raw.githubusercontent.com/...">
+      </div>
+      <button class="btn primary" onclick="renderImages()" style="margin-top:0.5rem">載入立繪預覽</button>
+    </div>
+    <div id="image-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:1rem"></div>
+  </div>
+
+  <!-- 世界觀設定 -->
+  <div id="tab-world" class="hidden">
+    <div class="section-title"><span>世界觀設定</span></div>
+
+    <div class="panel">
+      <div class="form-group">
+        <label>世界觀概述</label>
+        <textarea id="world-overview" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label>主角設定</label>
+        <textarea id="world-protagonist" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>敘事風格</label>
+        <textarea id="world-style" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>AI 敘事引擎 System Prompt 模板</label>
+        <textarea id="world-prompt" rows="8" style="font-family:monospace;font-size:12px"></textarea>
+      </div>
+      <button class="btn primary" onclick="saveWorld()">儲存世界觀</button>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 角色 Modal -->
+<div class="modal-overlay hidden" id="char-modal">
+  <div class="modal">
+    <div class="modal-title" id="char-modal-title">新增角色</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>稱謂</label>
+        <input type="text" id="c-name" placeholder="如：盧西安">
+      </div>
+      <div class="form-group">
+        <label>全名</label>
+        <input type="text" id="c-fullname" placeholder="如：盧西安·艾什維爾">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>身分 / 職稱</label>
+        <input type="text" id="c-role" placeholder="如：月之神殿大祭司">
+      </div>
+      <div class="form-group">
+        <label>象徵色（HEX）</label>
+        <input type="text" id="c-color" placeholder="#c4a8f0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>場景色調（HEX）</label>
+      <input type="text" id="c-scene-color" placeholder="#0e0c1f">
+    </div>
+    <div class="form-group">
+      <label>角色個性描述</label>
+      <textarea id="c-personality" placeholder="描述角色說話方式、個性特徵..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>開場引導詞</label>
+      <textarea id="c-opening" placeholder="遊戲開始時的場景描述..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>True End 結局文本</label>
+      <textarea id="c-trueend" placeholder="好感度達上限時的結局..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>與標題對應結尾</label>
+      <textarea id="c-titleend" placeholder="呼應「燼與誓 · Where Oaths Are Ash」的結局金句..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>語氣設定（說話方式、禁忌詞、錨定台詞）</label>
+      <textarea id="c-voice" rows="8" placeholder="【句型偏好】&#10;【禁忌詞】&#10;【情緒變化】&#10;【錨定台詞】&#10;【AI寫作提示】"></textarea>
+    </div>
+    <div class="section-title" style="font-size:13px;margin-bottom:0.75rem">心境軌跡（階段 0–4）</div>
+    <div id="mood-inputs"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeCharModal()">取消</button>
+      <button class="btn primary" onclick="saveChar()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 事件 Modal -->
+<div class="modal-overlay hidden" id="event-modal">
+  <div class="modal">
+    <div class="modal-title" id="event-modal-title">新增特殊事件</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>事件標題</label>
+        <input type="text" id="e-title" placeholder="如：月光之下">
+      </div>
+      <div class="form-group">
+        <label>表情符號</label>
+        <input type="text" id="e-emoji" placeholder="如：🌙">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>觸發角色</label>
+        <select id="e-char"></select>
+      </div>
+      <div class="form-group">
+        <label>觸發好感度</label>
+        <input type="number" id="e-affection" placeholder="如：20" min="0" max="100">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>事件描述</label>
+      <textarea id="e-desc" placeholder="描述此事件的場景..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeEventModal()">取消</button>
+      <button class="btn primary" onclick="saveEvent()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 勢力 Modal -->
+<div class="modal-overlay hidden" id="faction-modal">
+  <div class="modal">
+    <div class="modal-title">新增／編輯勢力</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>勢力名稱</label>
+        <input type="text" id="f-name" placeholder="如：神殿體系">
+      </div>
+      <div class="form-group">
+        <label>勢力類型</label>
+        <input type="text" id="f-type" placeholder="如：魔法正統">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>主要據點</label>
+        <input type="text" id="f-capital" placeholder="如：塞勒涅大教堂">
+      </div>
+      <div class="form-group">
+        <label>象徵色（HEX）</label>
+        <input type="text" id="f-color" placeholder="#c4a8f0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>勢力描述與對灰脈的態度</label>
+      <textarea id="f-desc" rows="4" placeholder="描述此勢力的核心資本、對主角的態度..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeFactionModal()">取消</button>
+      <button class="btn primary" onclick="saveFaction()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 好感度等級 Modal -->
+<div class="modal-overlay hidden" id="affection-modal">
+  <div class="modal">
+    <div class="modal-title">新增好感度等級</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>最低值</label>
+        <input type="number" id="a-min" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>最高值</label>
+        <input type="number" id="a-max" placeholder="19">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>關係描述</label>
+      <input type="text" id="a-label" placeholder="如：初識戒備">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById(\'affection-modal\').classList.add(\'hidden\')">取消</button>
+      <button class="btn primary" onclick="saveAffection()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const state = {
+  chars: [
+    { id:1, name:'盧西安', fullname:'盧西安·艾什維爾', role:'月之神殿大祭司', color:'#c4a8f0', sceneColor:'#0e0c1f',
+      personality:'【核心性格】冷峻、神秘、克制。讓人覺得永遠隔著一層霧——你以為看懂了他，卻發現只是看見了他想讓你看見的部分。言詞簡練，每句話經過精密計算，卻不顯刻意。沉默對他而言是一種語言。\n\n【說話方式】語速緩慢，咬字清晰，習慣在句尾留白，讓對方自行填補意思。幾乎不反問，但偶爾會說一句讓人回想半天的話。對主角說話時，語氣比對任何人都少一分距離——但他自己並不承認這件事。\n\n【深層性格】並非冷漠，而是把所有情感壓在水面之下。懂得太多、見過太多，卻依然選擇留守神殿，因為他相信某種秩序。對主角產生情感後，最大的掙扎不是「要不要愛」，而是「這樣做是否值得一切代價」。\n\n【弱點與執念】對「誓言」有近乎偏執的重視——違背誓言對他而言等同於失去自我。當他願意為主角打破誓言時，那份震動是真實的、幾乎是毀滅性的。\n\n【習慣動作】凝視對方眼睛的時間比正常人稍長；在思考時會輕觸胸前的星紋印記；很少先開口說話，但一開口就讓人無法移開視線。',
+      opening:'遊戲開始。請描述主角與盧西安·艾什維爾在神殿廊道中第一次相遇的場景——月光透過石窗斜落，他背對著主角，緩緩轉身。氛圍冷肅神秘，他語氣克制，給出3個對話選項。',
+      trueend:'你與盧西安·艾什維爾的羈絆超越了命運的束縛。\n他以額頭抵著你的額頭，漫天繁星作證——他違背了所有誓言，卻願為你再立一個。\n「這個結局，是我們一起選擇的。代價我一人承擔，你只需要……留著。」',
+      titleend:'Where oaths are ash, I remain.\n「誓言化為灰燼之處，我仍在。」',
+      moods:['冷峻的目光','句尾留白的試探','輕觸星紋印記','隔著霧的溫柔','誓言已碎，心意已決'],
+      voiceProfile:`【句型偏好】短句，陳述句為主，幾乎不用感嘆號。句尾常留白，讓對方自己補完意思。\n\n【禁忌詞】不說「我覺得」「也許」「可能」——他不猜測，只陳述。不用口語縮寫。\n\n【對主角說話】語氣比對其他人少一分距離，但他自己不承認。偶爾稱呼「你」時停頓略長。\n\n【對他人說話】更冷、更短。命令句居多，不解釋原因。\n\n【情緒變化】\n動搖時：句子更短，甚至只說一個詞，然後沉默。不是結巴，而是刻意截斷。\n在意時：反而問問題——但問的不是真正想問的，而是旁敲側擊的那種。\n憤怒時：語氣更平靜，字句更精準，讓人感到比吼叫更有壓迫感。\n溫柔時：不說甜言蜜語，而是說一句讓對方想了三天的話，然後若無其事離開。\n\n【錨定台詞】\n「你問的問題，我還沒決定要不要回答。」\n「留在這裡。不是命令——是請求。」\n「危險的不是這個地方。是你讓我開始在意這個地方。」\n\n【AI寫作提示】絕不主動解釋自己的動機。溫柔藏在動作裡不在台詞裡。旁白可描述他的手微微收緊。台詞永遠比他想說的少一半。` },
+    { id:2, name:'卡利克斯', fullname:'卡利克斯·達文雷', role:'叛逆騎士團長', color:'#f0a0a8', sceneColor:'#1a0e0e',
+      personality:'【核心性格】直接、衝動、外剛內柔。用行動而非語言說話——他不會說「我在乎你」，但會在你沒察覺時擋在你前方。表面的粗魯是他唯一會的防禦方式，傷過人也被人傷過，所以築了很厚的牆。\n\n【說話方式】語氣直白，有時失禮，不擅長修飾。說錯話後不會道歉，但會用行動補救。偶爾爆出一句真心話，然後自己先別過臉去，假裝什麼都沒發生。對主角的語氣隨好感度從「刺」變「澀」——那種說不出口的溫柔。\n\n【深層性格】衝動來自深根的正義感與保護欲，但過去的創傷讓他學會「先推開別人，免得被拋棄」。他害怕失去，所以習慣讓自己先變成那個讓人離開的原因。對主角動心後，他不知道怎麼辦——這是他第一次有什麼東西是他不想用力量解決的。\n\n【弱點與執念】無法接受自己的軟弱被人看見，但偏偏只有在主角面前會不小心露出來。手臂上的傷疤不只是肉體的記憶，而是他失去最重要的人的印記。\n\n【習慣動作】說話時習慣交叉雙臂，但在主角面前這個姿勢會慢慢消失；情緒激動時會握緊拳頭；從不讓人站在他背後，除了主角。',
+      opening:'遊戲開始。請描述主角與卡利克斯·達文雷在混亂的市集街道上第一次相遇的場景——他擋在某個危險前方，轉身看見主角時，眼神先是戒備後是意外。氛圍緊張，語氣粗直，給出3個對話選項。',
+      trueend:'你與卡利克斯·達文雷的羈絆超越了命運的束縛。\n他沙啞著嗓子說：「我什麼都可以面對，就是沒辦法……看你受傷。」\n他別過臉，耳尖卻紅了。那道牆，終於有了一扇只為你開著的門。',
+      titleend:'I never swore. But I would burn for thee all the same.\n「我從未立誓。但我同樣願意為你燃盡。」',
+      moods:['雙臂交叉的戒備','說錯話後的沉默','握緊拳頭的掙扎','背對你卻側耳傾聽','終於讓你站在他身後'],
+      voiceProfile:`【句型偏好】直接、口語、有時語句不完整——說到一半覺得夠了就停。偶爾爆粗口（輕度）。\n\n【禁忌詞】不說「我擔心你」「我在意你」——他永遠用行動替代這類話，說出口會讓他不舒服。\n\n【對主角說話】表面粗魯，但仔細聽會發現他從不真的貶低她。罵的都是情況，不是她這個人。\n\n【對他人說話】更簡短，沒耐心，指令式。對敵人則完全沉默——他不和敵人廢話。\n\n【情緒變化】\n動搖時：說話更快、更衝，像是要用語速壓過自己的情緒。\n在意時：突然多說了一句不必要的話，然後自己也察覺了，別過臉。\n憤怒時：聲音不一定大，但低沉，字咬得很清楚。這時候反而危險。\n溫柔時：聲音會低一個音，語速放慢，像是不確定自己在說什麼。說完會清嗓子掩飾。\n\n【錨定台詞】\n「行了，別看了。又沒受傷。」（他自己手臂在流血）\n「跟緊一點。不是因為我想管你——是這地方不安全。」\n「……謝什麼謝。多此一舉。」（他剛擋下了一劍）\n\n【AI寫作提示】關心永遠偽裝成抱怨。身體動作先於台詞。耳尖紅了但台詞還是很衝。絕不說「我愛你」只說「別走」。` },
+    { id:3, name:'席爾文', fullname:'席爾文·艾拉瑞斯', role:'古老森林精靈王子', color:'#a0f0b0', sceneColor:'#0d180e',
+      personality:'【核心性格】溫柔、詩意、帶著千年孤獨的平靜。像一片古老的森林——表面安靜美好，但越深入越會感覺到某種龐大而沉重的東西。他讓人安心，但那份安心裡藏著憂傷。\n\n【說話方式】語速緩慢，像在思考每個字是否值得說出口。喜歡用自然意象作比喻，說出的話常常帶著詩的質地。很少有急迫感，卻能讓人感覺被認真對待。對主角說話時偶爾會說出古精靈語的詞彙，然後輕輕解釋——像是在分享一個秘密。\n\n【深層性格】活了太久，見過太多人來了又走，所以學會了不輕易靠近。他的溫柔不是天真，而是見過黑暗之後仍然選擇溫柔——這讓他的溫柔比任何人都更有重量。對主角的感情讓他第一次感覺「時間」變成了珍貴的事，而不是令他疲倦的東西。\n\n【弱點與執念】精靈族的誓言與族群的記憶像鎖鏈一樣綁著他，無法輕易「選擇自己」。最深的恐懼是：愛上一個會死去的人，然後再一次獨自被留下。\n\n【習慣動作】說話時偶爾會望向遠方，像是在聽什麼；與人走路時會讓對方走在光線較亮的那側；情緒波動時周圍的植物會微微顫動，他自己不一定知道。',
+      opening:'遊戲開始。請描述主角在月圓夜的林間迷路，遇見席爾文·艾拉瑞斯的場景——他站在一棵古老巨樹旁，周圍的螢火蟲聚向他。他語速緩慢，如詩般開口，給出3個對話選項。',
+      trueend:'你與席爾文·艾拉瑞斯的羈絆超越了命運的束縛。\n「我已等了一千年，」他的眼中有星河流轉，「等一個能讓我心甘情願打破誓言的人。是你。」\n周圍的森林輕輕震顫，像是千年的孤獨終於有了回聲。',
+      titleend:'A thousand years of oaths — and thou art worth every ash.\n「千年的誓言——而你，值得那每一縷灰燼。」',
+      moods:['如沐春風的初見','分享古精靈語的秘密','望向遠方的憂傷','讓你走在光線較亮的那側','植物顫動，心意已動'],
+      voiceProfile:`【句型偏好】長句，帶節奏感，像在吟詩。喜歡用自然意象比喻情感。句尾常是疑問或邀請，不強迫。\n\n【禁忌詞】不說急迫的話，不催促，不命令。就算是危急情況，語氣也是「我們或許可以……」\n\n【對主角說話】有時停下來，靜靜看她一會兒，才繼續說話。像是在確認她是真實存在的。\n\n【對他人說話】同樣溫柔，但少了那份專注。和對主角說話時的細緻度差一層。\n\n【情緒變化】\n動搖時：自然意象的比喻會消失，說話變得更直接，反而讓人察覺他不對勁。\n在意時：重複對方說的某個詞，輕輕唸一遍，像是在把它記住。\n憂傷時：說話更慢，有時中途停頓，望向遠處，像是在想很久以前的事。\n溫柔時：聲音更輕，幾乎是說給自己聽的音量，卻讓人聽得每個字都清楚。\n\n【錨定台詞】\n「風在這個季節是向北走的。你呢？要往哪裡去？」\n「我見過很多個春天。但這一個，我想記住。」（他看的是她，不是花）\n「你說的『普通』——我以為我已經不會羨慕了。」\n\n【AI寫作提示】孤獨藏在詩意後面。千年記憶偶爾洩漏在比喻裡。溫柔但不黏膩。動搖時比喻消失是關鍵信號。` },
+    { id:4, name:'多里安', fullname:'多里安·沃斯', role:'流亡王國末裔王子', color:'#f0e0a0', sceneColor:'#191510',
+      personality:'【核心性格】諷刺、算計、偽裝成玩世不恭的人。整個故事裡最難讀懂的人——因為他最擅長的就是讓別人讀不懂他。笑容是習慣，不一定是真情；說的話可能是試探，也可能剛好是真心，連他自己有時都分不清。\n\n【說話方式】帶刺，語速略快，習慣在嚴肅的話前面加一句玩笑來稀釋。很少正面回答問題，常用反問或岔開話題。對主角的說話方式最特別——他會說出真心話，但立刻用語氣讓它聽起來像是玩笑，給自己留退路。\n\n【深層性格】不信任任何人，因為他從小就知道在政治裡長大的人不能有軟肋。早就習慣把自己藏在一個又一個的面具後面，久到連他自己都忘記最裡面那個人長什麼樣子。主角是第一個讓他覺得「不想算計」的人——這讓他恐慌，也讓他著迷。\n\n【弱點與執念】對「被看穿」既渴望又恐懼。一邊試探主角是否真的了解他，一邊在對方越靠近時越想逃。流亡的身分讓他對「歸屬」有很深的傷，他用冷漠和優越感掩蓋一個事實：他只是想有一個地方是真的屬於他的。\n\n【習慣動作】說話時眼神從不游移——他在觀察；無意識地把玩戒指或隨身小物；唯一誠實的時刻是在以為沒人看他的瞬間，那時他的表情會短暫地卸下所有防衛。',
+      opening:'遊戲開始。請描述主角在一場貴族宴會上，與多里安·沃斯偶然對上眼的場景——他端著酒杯，嘴角帶著似笑非笑。他主動搭話，語氣帶刺卻意味深長，給出3個對話選項。',
+      trueend:'你與多里安·沃斯的羈絆超越了命運的束縛。\n「你是我至今為止，」他的笑消失了，眼神赤裸，「唯一猜不透，卻最不想猜透的人。」\n那枚他從不離手的戒指，悄悄放進了你的掌心。',
+      titleend:'I have played every game. This is the first I chose to lose.\n「所有的局我都算過。這是我第一次，選擇輸。」',
+      moods:['玩世不恭的第一印象','帶刺的試探','真心話後的岔題','把玩戒指的心神不寧','卸下防衛的瞬間'],
+      voiceProfile:`【句型偏好】帶刺的反問、輕描淡寫的陳述、故意說一半留一半。語氣永遠比內容輕鬆一個等級。\n\n【禁忌詞】不說「我需要你」「我怕失去你」——說出這類話等於承認弱點，他寧可死。\n\n【對主角說話】比對任何人都多說一句。說完玩笑停頓，再加一句讓她心跳的真心話，接著若無其事繼續。\n\n【對他人說話】全程表演，每個字都經過計算。聽起來隨興，但你找不到一句廢話。\n\n【情緒變化】\n動搖時：玩笑變多，頻率加快——越不穩定，外殼越厚。這是警訊。\n真正在意時：反而安靜下來，說一句沒有修飾的話，然後馬上用另一個玩笑蓋掉。\n憤怒時：笑容沒了，語氣變得鋒利而精準，像刀換了一面。這時他說的每句話都是真的。\n被戳穿時：沉默兩秒，然後說一句更犀利的話轉移焦點。他不承認，他只是重新佈局。\n\n【錨定台詞】\n「你以為你看穿我了？」（停頓）「……算了，或許你真的有。」\n「我本來打算利用你的。計畫趕不上變化——比如說，你這個人。」\n「別用那種眼神看我。我還沒準備好讓人這樣看我。」\n\n【AI寫作提示】玩笑越多越不穩定。真心話藏在玩笑的尾巴。沉默比台詞更值得描寫。他算計所有人，除了她。` }
+  ],
+  events: [
+    { id:1, charId:1, emoji:'🌙', title:'月光之下', affection:20, desc:'盧西安在祭典後獨自站在神殿廊下，月光映照他的側臉。當你靠近，他似乎並不意外。' },
+    { id:2, charId:1, emoji:'✦', title:'封印的秘密', affection:50, desc:'盧西安將一枚古老的星紋戒指套在你手上，低聲說：「不要問，先戴上。」你感到一股魔力流入體內。' },
+    { id:3, charId:1, emoji:'💫', title:'誓約之刻', affection:80, desc:'他以額頭抵著你的額頭，漫天繁星作證：「我違背了所有誓言，卻願為你再立一個。」' },
+    { id:4, charId:2, emoji:'⚔️', title:'劍與誓言', affection:20, desc:'卡利克斯沒有說話，只是悄悄站在你身後，用身體擋住了所有可能的危險。' },
+    { id:5, charId:2, emoji:'🔥', title:'傷痕', affection:50, desc:'他捲起袖子，讓你看見那道貫穿手臂的古老傷疤：「現在你知道了。還待在我身邊，是你自己選的。」' },
+    { id:6, charId:2, emoji:'❤️', title:'我的軟肋', affection:80, desc:'他沙啞著嗓子說：「我什麼都可以面對，就是沒辦法…看你受傷。」他別過臉，耳尖卻紅了。' },
+    { id:7, charId:3, emoji:'🌿', title:'林間私語', affection:20, desc:'席爾文採下一朵只在月圓夜開放的銀花，輕輕編入你的髮間：「你比任何花都適合它。」' },
+    { id:8, charId:3, emoji:'🌙', title:'精靈秘語', affection:50, desc:'他握住你的手，用古精靈語低吟了一段咒語，你的手心綻開了一朵光之花。「這是我族的記憶，贈予你。」' },
+    { id:9, charId:3, emoji:'💚', title:'千年等待', affection:80, desc:'「我已等了一千年，」他的眼中有星河流轉，「等一個能讓我心甘情願打破誓言的人。是你。」' },
+    { id:10, charId:4, emoji:'♟️', title:'局中局', affection:20, desc:'多里安擋在你面前，語氣懶散：「我只是不想讓棋局提早結束。」但他的手攥得很緊。' },
+    { id:11, charId:4, emoji:'👑', title:'真實身分', affection:50, desc:'他取下偽裝的面具，露出那枚隱藏的王族胎記：「現在你知道了。出賣我，或者……留下來。」' },
+    { id:12, charId:4, emoji:'💛', title:'唯一的破綻', affection:80, desc:'「你是我至今為止，」他的笑消失了，眼神赤裸，「唯一猜不透，卻最不想猜透的人。」' }
+  ],
+  timeline: [
+    {stage:0,title:'序章'},{stage:1,title:'第一天'},{stage:2,title:'第二天'},{stage:3,title:'第三天'},
+    {stage:4,title:'第四天'},{stage:5,title:'第五天'},{stage:6,title:'第六天'},{stage:7,title:'第七天'},
+    {stage:8,title:'第八天'},{stage:9,title:'第九天'},{stage:10,title:'第十天'}
+  ],
+  affection: [
+    {min:0,max:19,label:'初識戒備'},{min:20,max:39,label:'略有好感'},
+    {min:40,max:59,label:'互有情愫'},{min:60,max:79,label:'深度羈絆'},{min:80,max:100,label:'誓約將成'}
+  ],
+  world: {
+    overview:'魔法與黑暗並存的西方奇幻異世界，大陸型地理。兩大魔法系統並行：元素魔法（主流，可量化、可教學，魔力強弱形成社會階層）與符文／契約魔法（古典，符文需精確公式無代價，契約需雙方同意且具約束力，誓言具有真實魔法效力）。世界由五大勢力鬆散共存：王室／貴族、神殿體系、學術機構、精靈族等非人類勢力、其他派系。世界由秩序（Orda）與混沌（Vael）共同創造天秤以維持平衡，魔物是天秤的矯正機制。北方為高密度魔獸領地，鐵壁要塞是主大陸防線核心。若天秤傾斜超過臨界，異端神明（The Unwritten）將誕生——千年前古書有載，已被世人遺忘。',
+    protagonist:'擁有罕見「灰脈」體質的少女。灰脈在魔法體系中屬性為「無」，古籍記載為已滅絕的遠古體質，各方勢力私下知曉但公開否認。本質是「想像力即魔法」——感應力來自無意識的意志投射，無法主動觸發也無法關閉。對天秤的傾斜有直接感應，能先於他人感知魔物將近。成年後獨自從偏遠村子前往首都，只是想看看世界的寬闊。個性堅韌獨立，不輕易表露情緒，習慣自己扛，不擅長求助。面對真正的溫柔時容易愣住。內心獨白細膩誠實，和她對外的冷靜形成落差——這個落差是情感張力的核心。',
+    style:'氛圍濃厚，台詞優美張力；旁白 2–3 句（可含主角內心獨白），台詞 1–2 句，全程繁體中文。台詞符合角色語氣設定，主角內心獨白與外在冷靜形成對比。灰脈感應放在旁白，不讓主角自己說出來。',
+    prompt:`你是暗黑奇幻乙女遊戲「燼與誓」的 AI 敘事引擎。
+以下是本遊戲的基本設定，請完整記住並嚴格遵守：
+
+【世界觀】
+魔法與黑暗並存的西方奇幻異世界，大陸型地理，周邊為海洋。兩大魔法系統並行：
+- 元素魔法（主流）：可教學、可量化，魔力強弱形成社會階層，學術機構掌握授權與認證。
+- 符文魔法：需精確公式才有效，無代價，神殿體系為主要傳承者。
+- 契約魔法：需雙方自願同意，一旦成立具有魔法約束力。「誓言」在此世界不只是語言，而是真實的契約。
+
+世界表面和平，實為五大勢力（王室／貴族、神殿體系、學術機構、精靈族等非人類勢力、其他派系）長期博弈下的脆弱均衡。
+
+世界由秩序（Orda）與混沌（Vael）共同創造「天秤」以維持平衡。魔物是天秤的矯正機制，當世界某處力量過度積聚便出現消耗歸零。混沌介入更深，使魔物偶有失控行為。北方為高密度魔獸領地，鐵壁要塞是主大陸抵禦北方魔獸的防線核心。若天秤傾斜超過臨界點，「異端神明（The Unwritten）」將誕生——千年前古書有載，已被世人遺忘。
+
+【主角設定】
+姓名由玩家自填。個性堅韌獨立，不輕易表露情緒，有自己的判斷。
+對灰脈的態度是靜靜接受——知道自己和別人不一樣，但不想讓它成為全部，
+也不打算假裝它不存在。不擅長開口求助；面對真正的溫柔時容易愣住。
+內心獨白細膩誠實，和她對外的冷靜形成落差——這個落差是情感張力的核心。
+
+【灰脈】
+在魔法體系中屬性為「無」——古籍記載為已滅絕的遠古體質，各方勢力私下知曉但公開否認。
+本質是「想像力即魔法」，感應力來自無意識的意志投射，無法主動觸發也無法關閉。
+靠近魔法印記、詛咒物、帶有強烈意志的場所、或魔物將近時，身體會先於意識有所反應。
+各方勢力對主角的注意，是出於用途的盤算，而非崇敬。
+灰脈感應的描寫放在旁白，不讓主角自己說出來。
+
+【好感度系統】
+- 好感度範圍：0 ～ 100
+- 每次對話的 affection_change 範圍：-10 ～ +15
+- 好感度達到 100 時，觸發角色 True End（真實結局）
+- 好感度對應關係：
+    0–19   初識戒備
+    20–39  略有好感
+    40–59  互有情愫
+    60–79  深度羈絆
+    80–100 誓約將成
+
+【敘事風格】
+旁白 2–3 句，台詞 1–2 句，氛圍濃厚優美，全程繁體中文。
+台詞要符合角色個性與語氣設定，不能超出角色說話方式。
+主角的內心獨白可穿插旁白中，要細膩、誠實，與她外在的冷靜形成對比。
+
+【回應格式】
+每次必須嚴格輸出以下 JSON，不包含任何 markdown 符號或多餘說明：
+{
+  "narrative": "旁白描述，2–3句（可含主角內心獨白）",
+  "dialogue": "角色台詞，1–2句",
+  "location": "場景地點，3–6字",
+  "affection_change": 數字（-10到+15的整數）,
+  "mood_index": 0到4的整數（代表角色當前心境階段）,
+  "choices": ["玩家選項1", "玩家選項2", "玩家選項3"]
+}`
+  },
+  editingCharId: null,
+  editingEventId: null,
+  eventFilter: null,
+  nextId: 100
+};
+
+function switchTab(name) {
+  ['chars','events','timeline','system','geography','world','images','magic','factions'].forEach(t => {
+    const el = document.getElementById('tab-'+t);
+    if(el) el.classList.add('hidden');
+  });
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('tab-'+name);
+  if(target) target.classList.remove('hidden');
+  event.target.classList.add('active');
+
+  if(name==='events') renderEvents();
+  if(name==='timeline') renderTimeline();
+  if(name==='system') renderAffection();
+  if(name==='world') renderWorld();
+  if(name==='chars') renderChars();
+  if(name==='images') renderImages();
+  if(name==='magic') renderMagic();
+  if(name==='factions') renderFactions();
+}
+
+function renderChars() {
+  const grid = document.getElementById('char-grid');
+  grid.innerHTML = state.chars.map(c => `
+    <div class="char-card">
+      <div class="char-name">
+        <span class="char-color-dot" style="background:${c.color}"></span>
+        ${c.fullname}
+      </div>
+      <div class="char-role">${c.role}</div>
+      <div class="char-desc">${c.personality}</div>
+      <div class="char-actions">
+        <button class="btn" onclick="openCharModal(${c.id})">編輯</button>
+        <button class="btn danger" onclick="deleteChar(${c.id})">刪除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderEvents() {
+  const filter = document.getElementById('event-char-filter');
+  filter.innerHTML = `<button class="btn ${state.eventFilter===null?'primary':''}" onclick="setEventFilter(null)">全部</button>` +
+    state.chars.map(c => `<button class="btn ${state.eventFilter===c.id?'primary':''}" onclick="setEventFilter(${c.id})" style="border-color:${c.color}60;color:${c.color}">${c.name}</button>`).join('');
+
+  const list = document.getElementById('event-list');
+  const filtered = state.eventFilter ? state.events.filter(e=>e.charId===state.eventFilter) : state.events;
+  if(!filtered.length) {
+    list.innerHTML = '<div class="empty-state">尚無事件<br>點擊「新增事件」開始建立</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(e => {
+    const char = state.chars.find(c=>c.id===e.charId);
+    return `
+    <div class="event-item">
+      <div style="font-size:20px;line-height:1">${e.emoji||'✦'}</div>
+      <div style="flex:1">
+        <div class="event-title">${e.title} ${char?`<span class="tag" style="border-color:${char.color}50;color:${char.color}">${char.name}</span>`:''}</div>
+        <div class="event-desc">${e.desc}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <div class="event-affection">好感度 ${e.affection}</div>
+        <div style="display:flex;gap:4px">
+          <button class="btn" onclick="openEventModal(${e.id})">編輯</button>
+          <button class="btn danger" onclick="deleteEvent(${e.id})">刪除</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setEventFilter(id) {
+  state.eventFilter = id;
+  renderEvents();
+}
+
+function renderTimeline() {
+  const panel = document.getElementById('timeline-panel');
+  panel.innerHTML = state.timeline.map((t,i) => `
+    <div class="timeline-row">
+      <div class="timeline-num">${t.stage}</div>
+      <input style="flex:1;background:transparent;border:none;color:var(--text2);font-size:13px;font-family:'Noto Sans TC',sans-serif;outline:none" value="${t.title}" onchange="state.timeline[${i}].title=this.value">
+      <button class="timeline-edit" onclick="removeTimelineStage(${i})">移除</button>
+    </div>
+  `).join('');
+}
+
+function addTimelineStage() {
+  const next = state.timeline.length;
+  state.timeline.push({stage:next,title:'新階段'});
+  renderTimeline();
+}
+
+function removeTimelineStage(i) {
+  state.timeline.splice(i,1);
+  state.timeline.forEach((t,idx)=>t.stage=idx);
+  renderTimeline();
+}
+
+function renderAffection() {
+  const table = document.getElementById('affection-table');
+  table.innerHTML = `<tr><th>好感度範圍</th><th>關係描述</th><th></th></tr>` +
+    state.affection.map((a,i) => `
+      <tr>
+        <td>${a.min} – ${a.max}</td>
+        <td>${a.label}</td>
+        <td><button class="btn danger" style="font-size:10px;padding:3px 8px" onclick="deleteAffection(${i})">刪除</button></td>
+      </tr>
+    `).join('');
+}
+
+function openAffectionModal() {
+  document.getElementById('a-min').value='';
+  document.getElementById('a-max').value='';
+  document.getElementById('a-label').value='';
+  document.getElementById('affection-modal').classList.remove('hidden');
+}
+
+function saveAffection() {
+  const min=parseInt(document.getElementById('a-min').value);
+  const max=parseInt(document.getElementById('a-max').value);
+  const label=document.getElementById('a-label').value.trim();
+  if(!label||isNaN(min)||isNaN(max)) return;
+  state.affection.push({min,max,label});
+  state.affection.sort((a,b)=>a.min-b.min);
+  document.getElementById('affection-modal').classList.add('hidden');
+  renderAffection();
+}
+
+function deleteAffection(i) {
+  state.affection.splice(i,1);
+  renderAffection();
+}
+
+function renderWorld() {
+  document.getElementById('world-overview').value = state.world.overview;
+  document.getElementById('world-protagonist').value = state.world.protagonist;
+  document.getElementById('world-style').value = state.world.style;
+  document.getElementById('world-prompt').value = state.world.prompt;
+}
+
+function saveWorld() {
+  state.world.overview = document.getElementById('world-overview').value;
+  state.world.protagonist = document.getElementById('world-protagonist').value;
+  state.world.style = document.getElementById('world-style').value;
+  state.world.prompt = document.getElementById('world-prompt').value;
+  alert('世界觀設定已儲存');
+}
+
+function saveParams() { alert('系統參數已儲存'); }
+
+function openCharModal(id) {
+  state.editingCharId = id||null;
+  const char = id ? state.chars.find(c=>c.id===id) : null;
+  document.getElementById('char-modal-title').textContent = id ? '編輯角色' : '新增角色';
+  document.getElementById('c-name').value = char?.name||'';
+  document.getElementById('c-fullname').value = char?.fullname||'';
+  document.getElementById('c-role').value = char?.role||'';
+  document.getElementById('c-color').value = char?.color||'';
+  document.getElementById('c-scene-color').value = char?.sceneColor||'';
+  document.getElementById('c-personality').value = char?.personality||'';
+  document.getElementById('c-opening').value = char?.opening||'';
+  document.getElementById('c-trueend').value = char?.trueend||'';
+  document.getElementById('c-titleend').value = char?.titleend||'';
+  document.getElementById('c-voice').value = char?.voiceProfile||'';
+  const moods = char?.moods||['','','','',''];
+  document.getElementById('mood-inputs').innerHTML = [0,1,2,3,4].map(i=>`
+    <div class="form-group">
+      <label>階段 ${i} 心境</label>
+      <input type="text" id="mood-${i}" value="${moods[i]||''}" placeholder="描述此階段的心境...">
+    </div>
+  `).join('');
+  document.getElementById('char-modal').classList.remove('hidden');
+}
+
+function closeCharModal() {
+  document.getElementById('char-modal').classList.add('hidden');
+}
+
+function saveChar() {
+  const name=document.getElementById('c-name').value.trim();
+  const fullname=document.getElementById('c-fullname').value.trim();
+  const role=document.getElementById('c-role').value.trim();
+  if(!name||!fullname) return;
+  const moods=[0,1,2,3,4].map(i=>document.getElementById('mood-'+i).value.trim());
+  const data={
+    name,fullname,role,
+    color:document.getElementById('c-color').value.trim()||'#c4a8f0',
+    sceneColor:document.getElementById('c-scene-color').value.trim()||'#0e0c1f',
+    personality:document.getElementById('c-personality').value.trim(),
+    opening:document.getElementById('c-opening').value.trim(),
+    trueend:document.getElementById('c-trueend').value.trim(),
+    titleend:document.getElementById('c-titleend').value.trim(),
+    voiceProfile:document.getElementById('c-voice').value.trim(),
+    moods
+  };
+  if(state.editingCharId) {
+    const idx=state.chars.findIndex(c=>c.id===state.editingCharId);
+    state.chars[idx]={...state.chars[idx],...data};
+  } else {
+    state.chars.push({id:state.nextId++,...data});
+  }
+  closeCharModal();
+  renderChars();
+}
+
+function deleteChar(id) {
+  if(!confirm('確定要刪除此角色？')) return;
+  state.chars=state.chars.filter(c=>c.id!==id);
+  state.events=state.events.filter(e=>e.charId!==id);
+  renderChars();
+}
+
+function openEventModal(id) {
+  state.editingEventId=id||null;
+  const ev=id?state.events.find(e=>e.id===id):null;
+  document.getElementById('event-modal-title').textContent=id?'編輯事件':'新增特殊事件';
+  document.getElementById('e-title').value=ev?.title||'';
+  document.getElementById('e-emoji').value=ev?.emoji||'';
+  document.getElementById('e-affection').value=ev?.affection||'';
+  document.getElementById('e-desc').value=ev?.desc||'';
+  const sel=document.getElementById('e-char');
+  sel.innerHTML=state.chars.map(c=>`<option value="${c.id}" ${ev?.charId===c.id?'selected':''}>${c.name}</option>`).join('');
+  document.getElementById('event-modal').classList.remove('hidden');
+}
+
+function closeEventModal() {
+  document.getElementById('event-modal').classList.add('hidden');
+}
+
+function saveEvent() {
+  const title=document.getElementById('e-title').value.trim();
+  const desc=document.getElementById('e-desc').value.trim();
+  if(!title) return;
+  const data={
+    emoji:document.getElementById('e-emoji').value.trim(),
+    title,
+    charId:parseInt(document.getElementById('e-char').value),
+    affection:parseInt(document.getElementById('e-affection').value)||0,
+    desc
+  };
+  if(state.editingEventId) {
+    const idx=state.events.findIndex(e=>e.id===state.editingEventId);
+    state.events[idx]={...state.events[idx],...data};
+  } else {
+    state.events.push({id:state.nextId++,...data});
+  }
+  closeEventModal();
+  renderEvents();
+}
+
+function deleteEvent(id) {
+  state.events=state.events.filter(e=>e.id!==id);
+  renderEvents();
+}
+
+function exportScript() {
+  const lines=[`# 燼與誓 — 劇本資料\n\n> Where Oaths Are Ash · 暗黑奇幻乙女物語\n\n*v2.0*\n`];
+  lines.push(`## 世界觀設定\n- **世界觀**：${state.world.overview}\n- **主角**：${state.world.protagonist}\n- **風格**：${state.world.style}\n`);
+  lines.push(`## 時間軸\n| 階段 | 標題 |\n|------|------|\n`);
+  state.timeline.forEach(t=>lines.push(`| ${t.stage} | ${t.title} |\n`));
+  lines.push(`\n## 好感度系統\n| 好感度範圍 | 關係描述 |\n|-----------|----------|\n`);
+  state.affection.forEach(a=>lines.push(`| ${a.min} – ${a.max} | ${a.label} |\n`));
+  state.chars.forEach(c=>{
+    lines.push(`\n## 角色：${c.fullname}\n- **稱謂**：${c.name}\n- **身分**：${c.role}\n- **象徵色**：${c.color}\n- **場景色調**：${c.sceneColor}\n\n### 角色設定\n> ${c.personality}\n\n### 心境軌跡\n| 階段 | 心境描述 |\n|------|----------|\n`);
+    c.moods.forEach((m,i)=>lines.push(`| ${i} | ${m} |\n`));
+    const ev=state.events.filter(e=>e.charId===c.id).sort((a,b)=>a.affection-b.affection);
+    if(ev.length) {
+      lines.push(`\n### 特殊事件\n`);
+      ev.forEach(e=>lines.push(`**${e.emoji} ${e.title}**（好感度 ${e.affection}）\n> ${e.desc}\n\n`));
+    }
+    lines.push(`### 開場引導詞\n> ${c.opening}\n\n### True End 結局\n> ${c.trueend}\n\n### 與標題對應結尾\n> ${c.titleend}\n\n### 語氣設定\n${c.voiceProfile||'（未設定）'}\n`);
+  });
+  lines.push(`\n## AI 敘事引擎 System Prompt\n\`\`\`\n${state.world.prompt}\n\`\`\`\n`);
+  const blob=new Blob([lines.join('')],{type:'text/markdown'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='燼與誓_劇本.md';
+  a.click();
+}
+
+renderChars();
+
+// ── 勢力格局 ──
+const factionState = {
+  factions: [
+    {id:1, name:'王室／貴族', type:'世俗政治', capital:'波勒及', desc:'掌握土地、軍隊、血統。對灰脈公開否認其存在，私下試圖將主角收編為私人資產。', color:'#f0e0a0'},
+    {id:2, name:'神殿體系', type:'魔法正統', capital:'塞勒涅大教堂', desc:'掌握符文傳承、誓約認證、異端神明殘篇。盧西安私下掌握最完整的殘篇資料。', color:'#c4a8f0'},
+    {id:3, name:'學術機構', type:'知識授權', capital:'阿爾卡納學院', desc:'掌握魔法研究、等級制度。主流學者公開否認灰脈，少數研究者私下蒐集案例。', color:'#a0d0f0'},
+    {id:4, name:'精靈族等非人類', type:'游離勢力', capital:'祭神之森', desc:'掌握古老魔法、自然盟約、天秤口傳記憶。知道灰脈的存在，比任何人都清楚其本質。', color:'#a0f0b0'},
+    {id:5, name:'厄瑞斯帝國', type:'東方強權', capital:'山口通道', desc:'軍事擴張帝國，50年前滅亡瓦赫姆王國，與古利德隔羅德羅斯山脈相望。', color:'#f0a0a0'},
+    {id:6, name:'弗瑞亞王廷', type:'西方部落', capital:'分脊河西岸', desc:'以獸人為主體的部落聯盟，各部落首領共治，獸王居上，以戰鬥為文化核心。', color:'#f0c080'},
+  ],
+  editingId: null,
+  nextId: 10
+};
+
+function renderFactions() {
+  const list = document.getElementById('faction-list');
+  if(!list) return;
+  list.innerHTML = factionState.factions.map(f => `
+    <div class="event-item">
+      <div style="width:12px;height:12px;border-radius:50%;background:${f.color};flex-shrink:0;margin-top:4px"></div>
+      <div style="flex:1">
+        <div class="event-title">${f.name} <span class="tag">${f.type}</span></div>
+        <div class="event-desc" style="margin-top:2px;color:var(--text3);font-size:11px">據點：${f.capital}</div>
+        <div class="event-desc" style="margin-top:4px">${f.desc}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0">
+        <button class="btn" onclick="openFactionModal(${f.id})">編輯</button>
+        <button class="btn danger" onclick="deleteFaction(${f.id})">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function openFactionModal(id) {
+  factionState.editingId = id || null;
+  const f = id ? factionState.factions.find(x=>x.id===id) : null;
+  document.getElementById('f-name').value = f?.name || '';
+  document.getElementById('f-type').value = f?.type || '';
+  document.getElementById('f-capital').value = f?.capital || '';
+  document.getElementById('f-color').value = f?.color || '#c4a8f0';
+  document.getElementById('f-desc').value = f?.desc || '';
+  document.getElementById('faction-modal').classList.remove('hidden');
+}
+
+function closeFactionModal() {
+  document.getElementById('faction-modal').classList.add('hidden');
+}
+
+function saveFaction() {
+  const name = document.getElementById('f-name').value.trim();
+  if(!name) return;
+  const data = {
+    name,
+    type: document.getElementById('f-type').value.trim(),
+    capital: document.getElementById('f-capital').value.trim(),
+    color: document.getElementById('f-color').value.trim() || '#c4a8f0',
+    desc: document.getElementById('f-desc').value.trim()
+  };
+  if(factionState.editingId) {
+    const idx = factionState.factions.findIndex(x=>x.id===factionState.editingId);
+    factionState.factions[idx] = {...factionState.factions[idx], ...data};
+  } else {
+    factionState.factions.push({id: factionState.nextId++, ...data});
+  }
+  closeFactionModal();
+  renderFactions();
+}
+
+function deleteFaction(id) {
+  if(!confirm('確定刪除此勢力？')) return;
+  factionState.factions = factionState.factions.filter(x=>x.id!==id);
+  renderFactions();
+}
+
+// ── 立繪管理 ──
+const IMAGE_FILES = [
+  {char:'盧西安·艾什維爾', files:['盧西安·艾什維爾.png','盧西安·艾什維爾_禮服.png','盧西安·艾什維爾_休閒.png','盧西安·艾什維爾_泳裝.png']},
+  {char:'卡利克斯·達文雷', files:['卡利克斯·達文雷.png','卡利克斯·達文雷_禮服.png','卡利克斯·達文雷_休閒.png','卡利克斯·達文雷_泳裝.png']},
+  {char:'席爾文·艾拉瑞斯', files:['席爾文·艾拉瑞斯.png','席爾文·艾拉瑞斯_禮服.png','席爾文·艾拉瑞斯_休閒.png','席爾文·艾拉瑞斯_泳裝.png']},
+  {char:'多里安·沃斯', files:['多里安·沃斯.png','多里安·沃斯_禮服.png','多里安·沃斯_休閒.png','多里安·沃斯_泳裝.png']},
+];
+
+function renderImages() {
+  const base = document.getElementById('img-base-url').value.trim();
+  const grid = document.getElementById('image-grid');
+  grid.innerHTML = IMAGE_FILES.map(char => `
+    <div class="panel" style="padding:1rem">
+      <div class="section-title" style="font-size:13px;margin-bottom:0.75rem">${char.char}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${char.files.map(f => {
+          const label = f.replace(/.*_/, '').replace('.png','') || '本服';
+          const displayLabel = f.includes('禮服') ? '禮服' : f.includes('休閒') ? '休閒' : f.includes('泳裝') ? '泳裝' : '本服';
+          return `<div style="text-align:center">
+            <img src="${base}${encodeURIComponent(f)}" alt="${f}"
+              style="width:100%;border-radius:8px;border:0.5px solid var(--border);background:var(--bg3);aspect-ratio:3/5;object-fit:cover;object-position:top"
+              onerror="this.style.opacity=0.3">
+            <div style="font-size:10px;color:var(--text3);margin-top:4px">${displayLabel}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderMagic() {} // 已預填資料，不需額外 render
+</script>
+</body>
+</html>
